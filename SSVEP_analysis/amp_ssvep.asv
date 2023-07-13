@@ -1,0 +1,87 @@
+%% clear all
+
+% Main function of getting SSVEP amplitude 
+% Author: Yonghao Chen (cheny@cbs.mpg.de)
+% Jul 13, 2023
+
+clear all;
+close all;
+clc;
+
+%%
+
+num_sub    = 10;    %Number of subjects
+num_event  = 36;    %Number of events
+num_channel= 64;    %Number of channels
+fs = 1000;          %Sampling frequency
+datalength = 10*fs; %Data length
+N = 1000;           %Number of repeated time
+num_emo = 6;        %Number of emotion state
+num_real = 6;       %Number of realism
+num_fbs = 1;        %Number of filter banks
+filter_order = 3;   %Order of filter
+
+%% Load all data
+for idx_sub = 1:num_sub
+
+    [EEG,num_trials,chanlocs] = loadEEG(idx_sub); %(channel*datalength*trials*events)
+    EEG_all_seg{idx_sub} = EEG(:,1001:9000,:,:); %Only select the time window [1s,9s]
+    EEG_all{idx_sub} = EEG; %All time-window
+
+end
+
+
+[b,a]=butter(filter_order, [3,40]/(fs/2));
+
+EEG_avg = [];
+for idx_sub = 1:num_sub
+
+    EEG_sub = EEG_all_seg{idx_sub};
+
+    % ----one channel situtaion ----%
+    %EEG_sub_temp = squeeze(EEG_sub(30,:,:,:));  %Oz=30 PO8=64
+
+    % ----electrode cluster ----%
+    Channel_selection = [25,61,60,63,64,62,29,30,31]; %Occiptial clusters
+    EEG_sub_temp = squeeze(mean(EEG_sub(Channel_selection,:,:,:),1)); 
+
+    EEG_temp = squeeze(mean(EEG_sub_temp,2)); %Average across sessions 
+  
+    for idx_event = 1:num_event
+        
+        EEG_event = EEG_temp(:,idx_event);  %Normal situation
+        EEG_event = filtfilt(b,a,EEG_event);
+        EEG_avg(idx_sub,idx_event,:)= EEG_event;
+        
+    end
+end
+
+
+%%  Average result across subject
+
+for idx_sub = 1:num_sub
+
+    EEG_avg_sub = squeeze(EEG_avg(idx_sub,:,:));
+    for idx_event = 1:num_event
+
+        EEG_temp = EEG_avg_sub(idx_event,:);
+        EEG_event_fft = abs(fft(EEG_temp))/length(EEG_temp);
+        FFT_5Hz(idx_sub,idx_event)  = EEG_event_fft(5*length(EEG_event_fft)/fs+1);
+        %FFT_10Hz(idx_sub,idx_event)  = EEG_event_fft(10*length(EEG_event_fft)/fs+1);
+        %FFT_15Hz(idx_sub,idx_event)  = EEG_event_fft(15*length(EEG_event_fft)/fs+1);
+        
+    end
+
+end
+
+FFT_5Hz_sub = squeeze(mean(FFT_5Hz,1)); %Average across subject
+
+for idx_real = 1:num_real
+
+    FFT_5Hz_avg(idx_real) = mean(FFT_5Hz_sub((idx_real-1)*num_real+1:idx_real*num_real)); %average across realness level
+    %FFT_10Hz_avg(idx_real) = mean(FFT_10Hz_sub((idx_real-1)*num_real+1:idx_real*num_real));
+    %FFT_15Hz_avg(idx_real) = mean(FFT_15Hz_sub((idx_real-1)*num_real+1:idx_real*num_real));
+
+end
+
+
