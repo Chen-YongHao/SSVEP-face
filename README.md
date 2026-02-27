@@ -20,4 +20,4 @@ Our scripts contain three major parts:
 ***Chen, Y., Stephani, T., Bagdasarian, M. T., Hilsmann, A., Eisert, P., Villringer, A., ... & Nikulin, V. V. (2024). Realness of face images can be decoded from non-linear modulation of EEG responses. _Scientific Reports_, 14(1), 5683.*** (https://www.nature.com/articles/s41598-024-56130-1)
 
 ## Contact info: 
-Please feel free to email * *cheny@cbs.mpg.de / nikulin@cbs.mpg.de* * if you have any questions.
+Please feel free to email *cheny@cbs.mpg.de / nikulin@cbs.mpg.de* if you have any questions.
