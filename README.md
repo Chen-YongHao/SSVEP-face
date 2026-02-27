@@ -3,7 +3,9 @@ We used an electroencephalography (EEG) dataset of **steady-state visual evoked 
 
 
 ## Stimulus material
-[1]Bagdasarian, M. T., Hilsmann, A., Eisert, P., Curio, G., Müller, K. R., Wiegand, T., & Bosse, S. (2020, May). EEG-based assessment of perceived realness in stylized face images. _In 2020 twelfth international Conference on Quality of multimedia experience (QoMEX)_ (pp. 1-4). IEEE.
+Stimulus can be found from: Bagdasarian, M. T., Hilsmann, A., Eisert, P., Curio, G., Müller, K. R., Wiegand, T., & Bosse, S. (2020, May). EEG-based assessment of perceived realness in stylized face images. _In 2020 twelfth international Conference on Quality of multimedia experience (QoMEX)_ (pp. 1-4). IEEE.
+
+## Structure
 
 Our scripts contain three major parts:
 
